@@ -4,7 +4,7 @@
 <h1>Send message</h1>
 {% if sent %}
 	<p>Your message was successfully sent.</p>
-	<a href="{% url "blog:post_list" %}"><p>Return to main page.</p></a>
+	<a href="{% url "blog:post_list" %}"><p>Return</p></a>
 {% else %}
 	<form method="post">
 		{% csrf_token %}

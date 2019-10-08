@@ -2,6 +2,11 @@
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
 <h1>{{ post.title }}</h1>
+<p class="tags">
+{% for tag in post.tags.all %}
+	<a href="{% url "blog:post_list_by_tag" tag %}"><span class="tag">{{ tag }}</span></a>
+{% endfor %}
+</p>
 <p class="date">Published {{ post.published }} by {{ post.author }}</p>
 {{ post.body|linebreaks }}
 {% with comments.count as n_comments %}
