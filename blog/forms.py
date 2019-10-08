@@ -1,5 +1,6 @@
 from django import forms
-from django.core.mail import send_mail
+
+from .models import Comment
 
 
 class FeedBackForm(forms.Form):
@@ -10,3 +11,9 @@ class FeedBackForm(forms.Form):
     def print_in_console(self):
         data = self.cleaned_data
         print(f'\n{data["name"]} ({data["email"]}) left feedback:\n{data["message"]}\n')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('name', 'email', 'body')

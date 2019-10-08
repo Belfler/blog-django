@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, FormView
+from django.shortcuts import render, reverse
+from django.views.generic import View, ListView, DetailView, FormView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import ModelFormMixin
 
-from blog.models import Post
-from blog.forms import FeedBackForm
+from blog.models import Post, Comment
+from blog.forms import FeedBackForm, CommentForm
 
 
 class PostListView(ListView):
@@ -23,9 +25,47 @@ class PostListView(ListView):
         return queryset
 
 
-class PostDetailView(DetailView):
+class DisplayPost(DetailView):
+    """
+    View that processes GET requests for displaying Post.
+    """
     model = Post
     template_name = 'blog/post/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.get_object().comments.filter(active=True)
+        context['form'] = CommentForm()
+        return context
+
+
+class CommentPost(SingleObjectMixin, FormView):
+    """
+    View that processes POST requests for commenting Post.
+    """
+    model = Post
+    form_class = CommentForm
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url(anchor_id='comments')
+
+    def form_valid(self, form):
+        cd = form.cleaned_data
+        Comment(post=self.get_object(), name=cd['name'], email=cd['email'], body=cd['body']).save()
+        return super().form_valid(form)
+
+
+class PostDetail(View):
+    """
+    View that combines DisplayPost and CommentPost for dispatching GET and POST requests.
+    """
+    def get(self, request, *args, **kwargs):
+        view = DisplayPost.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = CommentPost.as_view()
+        return view(request, *args, **kwargs)
 
 
 class FeedBackView(FormView):

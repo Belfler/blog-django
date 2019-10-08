@@ -4,4 +4,22 @@
 <h1>{{ post.title }}</h1>
 <p class="date">Published {{ post.published }} by {{ post.author }}</p>
 {{ post.body|linebreaks }}
+{% with comments.count as n_comments %}
+    <h2 id="comments">{{ n_comments }} comment{{ n_comments|pluralize }}</h2>
+{% endwith %}
+<hr>
+{% for comment in comments %}
+	<div class="comment">
+		<p class="info">Published {{ comment.created }} by {{ comment.name }}</p>
+		{{ comment.body|linebreaks }}
+	</div>
+{% empty %}
+<p>No comments yet.</p>
+{% endfor %}
+<h2>Add new comment</h2>
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Send comment">
+</form>
 {% endblock %}
