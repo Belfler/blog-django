@@ -1,7 +1,9 @@
 body { 
     margin:0;
     padding:0;
-    font-family:helvetica, sans-serif; 
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: #333;
+    background-color: #FBFBFB;
 }
 
 a { 
@@ -29,9 +31,11 @@ h2 {
 #sidebar { 
     float:right;
     width:30%;
-    padding:10px;
-    background:#efefef; 
     height:100%;
+}
+
+.menu-item {
+    background-color: #FFFF00;
 }
 
 p.date { 

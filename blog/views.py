@@ -1,7 +1,6 @@
-from django.shortcuts import render, reverse, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import View, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
-from django.views.generic.edit import ModelFormMixin
 from taggit.models import Tag
 
 from blog.models import Post, Comment
@@ -63,8 +62,10 @@ class DisplayPost(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = self.get_object().comments.filter(active=True)
+        post = self.get_object()
+        context['comments'] = post.comments.filter(active=True)
         context['form'] = CommentForm()
+        context['similar_posts'] = post.get_similar_posts(n_posts=5)
         return context
 
 
@@ -76,7 +77,7 @@ class CommentPost(SingleObjectMixin, FormView):
     form_class = CommentForm
 
     def get_success_url(self):
-        return self.get_object().get_absolute_url(anchor_id='comments')
+        return self.get_object().get_absolute_url(anchor='comments')
 
     def form_valid(self, form):
         cd = form.cleaned_data
