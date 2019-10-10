@@ -3,10 +3,13 @@
 
 {% block title %}Latest posts{% endblock %}
 {% block content %}
+
 {% if filter_by == "tag" %}
-	<h1>Tag <span class="tag">{{ tag }}</span></h1>
+	<h1>Tag <span class="yellow">{{ tag }}</span></h1>
 {% elif filter_by == "date" %}
 	<h1>Posts for {{ day }} {{ month }} {{ year }}</h1>
+{% elif filter_by == "search" %}
+	<h1>Search for <span class="yellow">{{ query }}</span></h1>
 {% else %}
 	<h1>Latest posts</h1>
 {% endif %}

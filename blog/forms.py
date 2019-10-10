@@ -17,3 +17,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('name', 'email', 'body')
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(widget=forms.TextInput(attrs={'autocomplete': 'off', 'placeholder': 'Search'}), label='')

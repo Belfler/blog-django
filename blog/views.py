@@ -1,14 +1,18 @@
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import View, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from taggit.models import Tag
 
 from blog.models import Post, Comment
-from blog.forms import FeedBackForm, CommentForm
+from blog.forms import FeedBackForm, CommentForm, SearchForm
 from blog.utils import months
 
 
 class PostList(ListView):
+    """
+    View that displays last published posts or posts filtered by tag, date or search.
+    """
     context_object_name = 'posts'
     template_name = 'blog/post/list.html'
     paginate_by = 5
@@ -30,12 +34,24 @@ class PostList(ListView):
         queryset = Post.published_man.filter(tags__exact=tag)
         return queryset
 
+    def filter_by_search(self):
+        if 'query' not in self.request.GET:
+            query = ''
+            queryset = Post.published_man.none()
+        else:
+            query = self.request.GET['query']
+            search_vector = SearchVector('title', weight='A') + SearchVector('body', weight='B')
+            search_query = SearchQuery(query)
+            queryset = (Post.published_man.annotate(rank=SearchRank(search_vector, search_query))
+                        .filter(rank__gte=0.3).order_by('-rank'))
+        self.kwargs['query'] = query
+        return queryset
+
     def get_queryset(self):
-        queryset = Post.published_man.all()
-        if self.filter_by == 'date':
-            queryset = self.filter_by_date()
-        elif self.filter_by == 'tag':
-            queryset = self.filter_by_tag()
+        if self.filter_by:
+            queryset = getattr(self, 'filter_by_' + self.filter_by)()
+        else:
+            queryset = Post.published_man.all()
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -43,12 +59,11 @@ class PostList(ListView):
         context['filter_by'] = self.filter_by
         if self.filter_by == 'tag':
             context['tag'] = self.kwargs['tag']
-        else:
+        elif self.filter_by == 'search':
+            context['query'] = self.kwargs['query']
+        elif self.filter_by == 'date':
             context['year'] = self.kwargs.get('year')
-            try:
-                context['month'] = months[self.kwargs.get('month')]
-            except TypeError:
-                pass
+            context['month'] = months.get(self.kwargs.get('month'), '')
             context['day'] = self.kwargs.get('day', '')
         return context
 
@@ -64,7 +79,8 @@ class DisplayPost(DetailView):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
         context['comments'] = post.comments.filter(active=True)
-        context['form'] = CommentForm()
+        context['comment_form'] = CommentForm()
+        context['search_form'] = SearchForm()
         context['similar_posts'] = post.get_similar_posts(n_posts=5)
         return context
 
@@ -106,3 +122,8 @@ class FeedBack(FormView):
     def form_valid(self, form):
         form.print_in_console()
         return render(self.request, self.template_name, context={'sent': True})
+
+
+class Search(FormView):
+    form_class = SearchForm
+    success_url = '/search/'

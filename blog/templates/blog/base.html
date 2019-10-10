@@ -15,6 +15,10 @@
 		<h2><a href="{% url "blog:post_list" %}">My blog</a></h2>
 		<h2><a href="{% url "blog:feedback" %}">Send feedback</a></h2>
 		<p>There are {% total_posts %} posts so far.</p>
+		<div><form action="{% url "blog:post_list_by_search" %}" method="get" id="search-form">
+			{% search_form %}
+			<input type="submit" value="find">
+		</form></div>
 	</div>
 	<div class="sidebar-widget">{% show_latest_comments 5 %}</div>
 </div>

@@ -1,3 +1,4 @@
+{% if latest_comments %}
 <h2>Latest comments</h2>
 <hr>
 {% for comment in latest_comments %}
@@ -8,3 +9,4 @@
 		<hr>
 	</div>
 {% endfor %}
+{% endif %}

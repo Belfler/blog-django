@@ -3,6 +3,7 @@ from django.views.generic import RedirectView
 
 from blog.views import *
 
+
 app_name = 'blog'
 
 urlpatterns = [
@@ -15,5 +16,6 @@ urlpatterns = [
          name='post_list_by_day'),
     path('posts/<int:year>/<int:month>/<int:day>/<slug:slug>/', PostDetail.as_view(), name='post_detail'),
     path('tags/<slug:tag_slug>/', PostList.as_view(filter_by='tag'), name='post_list_by_tag'),
+    path('search/', PostList.as_view(filter_by='search'), name='post_list_by_search'),
     path('feedback/', FeedBack.as_view(), name='feedback'),
 ]

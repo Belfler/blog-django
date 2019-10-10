@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from markdown import markdown
 
 from blog.models import Post, Comment
+from blog.forms import SearchForm
 
 register = template.Library()
 
@@ -21,3 +22,8 @@ def show_latest_comments(n_comments=5):
 @register.filter(name='markdown')
 def markdown_format(text):
     return mark_safe(markdown(text))
+
+
+@register.simple_tag
+def search_form():
+    return SearchForm()
