@@ -21,7 +21,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique_for_date='published')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
-    body = models.TextField()
+    body = models.TextField(help_text='<b>Markdown</b> supported')
     published = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

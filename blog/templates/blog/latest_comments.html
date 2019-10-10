@@ -1,0 +1,10 @@
+<h2>Latest comments</h2>
+<hr>
+{% for comment in latest_comments %}
+	<div>
+		<p>{{ comment.created|date:"SHORT_DATETIME_FORMAT" }} {{ comment.name }} wrote:</p>
+		<p>{{ comment.body|truncatewords:10 }}</p>
+		<p>on <a href="{{ comment.post.get_absolute_url }}">{{ comment.post.title|truncatewords:7 }}</a></p>
+		<hr>
+	</div>
+{% endfor %}

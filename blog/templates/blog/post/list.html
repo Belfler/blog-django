@@ -1,4 +1,6 @@
 {% extends "blog/base.html" %}
+{% load tags %}
+
 {% block title %}Latest posts{% endblock %}
 {% block content %}
 {% if filter_by == "tag" %}
@@ -13,7 +15,7 @@
 		<a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
 	</h2>
 	<p class="date">Published {{ post.published }} by {{ post.author }}</p>
-	{{ post.body|truncatewords:50|linebreaks }}
+	{{ post.body|markdown|truncatewords_html:50 }}
 	{% empty %}
 	<p>No articles yet.</p>
 {% endfor %}

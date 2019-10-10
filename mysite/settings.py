@@ -124,3 +124,4 @@ STATIC_URL = '/static/'
 
 # Format for dates and times. Used in templates.
 DATETIME_FORMAT = r'j M Y \a\t H:i'
+SHORT_DATETIME_FORMAT = r'H:i d.m.y'

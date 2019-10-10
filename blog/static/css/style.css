@@ -4,6 +4,10 @@ body {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
     color: #333;
     background-color: #FBFBFB;
+    display: grid;
+    grid-template-areas: "content sidebar";
+    grid-template-columns: 60% 30%;
+    grid-column-gap: 10%;
 }
 
 a { 
@@ -22,16 +26,20 @@ h2 {
     margin:30px 0 0;
 }
 
-#content { 
-    float:left;
-    width:60%;
+#content {
+    grid-area: content;
     padding:0 0 0 30px; 
 }
 
+blockquote {
+    border-left: 5px solid #FFFF00;
+    padding-left: 10px;
+}
+
 #sidebar { 
-    float:right;
-    width:30%;
+    grid-area: sidebar;
     height:100%;
+    padding: 0 30px 0 0;
 }
 
 .menu-item {

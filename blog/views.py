@@ -11,7 +11,7 @@ from blog.utils import months
 class PostList(ListView):
     context_object_name = 'posts'
     template_name = 'blog/post/list.html'
-    paginate_by = 3
+    paginate_by = 5
 
     filter_by = None
     filter_date_type = None
