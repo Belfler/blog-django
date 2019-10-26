@@ -15,7 +15,7 @@ def total_posts():
 
 @register.inclusion_tag('blog/latest_comments.html')
 def show_latest_comments(n_comments=5):
-    latest_comments = Comment.objects.order_by('-created')[:n_comments]
+    latest_comments = Comment.active_comments.order_by('-created').filter(post__status='published')[:n_comments]
     return {'latest_comments': latest_comments}
 
 

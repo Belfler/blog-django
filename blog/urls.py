@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import RedirectView
 
 from blog.views import *
@@ -18,4 +18,6 @@ urlpatterns = [
     path('tags/<slug:tag_slug>/', PostList.as_view(filter_by='tag'), name='post_list_by_tag'),
     path('search/', PostList.as_view(filter_by='search'), name='post_list_by_search'),
     path('feedback/', FeedBack.as_view(), name='feedback'),
+
+    path('api/', include('blog.api.urls', namespace='api')),
 ]
