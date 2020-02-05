@@ -1,11 +1,7 @@
-## The following requirements were added by pip freeze:
-Django==2.2.8
-django-taggit==1.1.0
-django-taggit-serializer==0.1.7
-djangorestframework==3.10.3
-Markdown==3.1.1
-psycopg2==2.8.3
-python-dotenv==0.10.3
-pytz==2019.2
-six==1.12.0
-sqlparse==0.3.0
+Django~=2.2.10
+django-taggit
+django-taggit-serializer
+djangorestframework~=3.11.0
+Markdown
+python-dotenv
+dj-config-url
