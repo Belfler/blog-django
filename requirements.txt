@@ -5,3 +5,4 @@ djangorestframework~=3.11.0
 Markdown
 python-dotenv
 dj-config-url
+psycopg2
