@@ -12,7 +12,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
 
-ALLOWED_HOSTS = [os.environ['HOST']]
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 
 INSTALLED_APPS = [
     # django apps
